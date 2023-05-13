@@ -1,4 +1,3 @@
-// TODO: Create a function that returns a license badge based on which license is passed in
 function renderLicenseBadge(license) {
 
 }
@@ -7,6 +6,10 @@ function renderLicenseBadge(license) {
 function renderLicenseLink(license) {
 
 }
+
+
+// [![License](https://img.shields.io/badge/License-Boost_1.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)
+
 
 // TODO: Create a function that returns the license section of README
 function renderLicenseSection(license) {
