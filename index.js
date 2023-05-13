@@ -59,8 +59,13 @@ async function getLicenses() {
   try {
     const response = await fetch("https://api.github.com/licenses");
     const licenses = await response.json();
+    const licenseOptions = [];
     for (const license of licenses){
     console.log(license);
+    licenseOptions.push({
+      key: license.spdx_id,
+    });
+    console.log(licenseOptions);
     }
   } catch (error) {
     console.error('Error fetching licenses:', error);
