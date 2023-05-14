@@ -1,6 +1,5 @@
 // TODO: Include packages needed for this application
 const { generateMarkdown } = require("./utils/generateMarkdown");
-const { renderLicenseLink } = require("./utils/generateMarkdown");
 
 const fs = require("fs");
 const inquirer = require("inquirer");
@@ -33,10 +32,11 @@ const questions = [
   //   message: "Provide instructions and examples for use. Include screenshots as needed.",
   // },
   {
-    type: "list",
+    type: "checkbox",
     name: "projLicense",
-    message: "What license are you using for your project, if any? Please select an option.",
-    choices: []
+    message:
+      "What licenses are you using for your project? Please select an option.",
+    choices: [],
   },
   // {
   //   type: "editor",
@@ -52,7 +52,7 @@ const questions = [
   //   type: "editor",
   //   name: "projQuestions",
   //   message: "Enter some information on how to contact you if there are any questions regarding your project.",
-  // }  
+  // }
 ];
 
 async function getLicenses() {
@@ -60,32 +60,44 @@ async function getLicenses() {
     const response = await fetch("https://api.github.com/licenses");
     const licenses = await response.json();
     const licenseOptions = [];
-    for (const license of licenses){
-    console.log(license);
-    licenseOptions.push({
-      name: license.name,
-      key: license.spdx_id
-    });
+
+    for (const license of licenses) {
+      const option = {
+        name: license.name,
+        value: license.spdx_id,
+      };
+      licenseOptions.push(option);
     }
-    console.log(licenseOptions);
-    questions.find((q) => q.name === 'projLicense').choices = licenseOptions;
+    questions.find((q) => q.name === "projLicense").choices = licenseOptions;
+    return licenses;
   } catch (error) {
-    console.error('Error fetching licenses:', error);
+    console.error("Error fetching licenses:", error);
   }
 }
 
 // TODO: Create a function to write README file
 function writeToFile(questions) {
   markdown = generateMarkdown(questions);
-  fs.writeFile("README.md", markdown, (err) => 
-  err ? console.error(err) : console.log("Success!")
+  fs.writeFile("README.md", markdown, (err) =>
+    err ? console.error(err) : console.log("Success!")
   );
 }
 
 // TODO: Create a function to initialize app
 async function init() {
-  await getLicenses();
+  licensing = await getLicenses();
   const answers = await inquirer.prompt(questions);
+  const selectedLicenses = answers.projLicense;  
+  let licenseInfo = answers.licenseInfo = [];
+  for (const selectedLicense of selectedLicenses) {
+    for (const license of licensing) {
+      if (license.spdx_id == selectedLicense) {
+        licenseInfo.push(license);
+        break;
+      }
+    }
+  }
+  console.log(licenseInfo);
   writeToFile(answers);
 }
 
