@@ -3,19 +3,30 @@
 
 ## Description
 
-undefined
+Readmefy is a README generator for GitHub that follows best practices.
 
 ## Table of Contents
 
-undefined
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+- [Credits](#credits)
+- [Tests](#tests)
+- [Contact](#contact)
 
 ## Installation
 
-undefined
+Install node
+Install npm
+Install inquirer
+Install fs
+
+
+
 
 ## Usage
 
-undefined
+Creating a README file for your project
 
 ## License
 
@@ -27,24 +38,20 @@ For more information about this license, please visit the following link:
 
 https://opensource.org/licenses/MIT
 
-![License](https://img.shields.io/badge/License-Unlicense-blue.svg)
-
-**This project is licensed under the [Unlicense](https://opensource.org/licenses/Unlicense) license.**
-
-For more information about this license, please visit the following link:
-
-https://opensource.org/licenses/Unlicense
-
 
 
 ## Credits
 
-undefined
+https://stackoverflow.com/questions/59078788/how-do-i-dynamically-add-questions-to-inquirer-js-during-execution-using-rxjs
+https://pakstech.com/blog/inquirer-js/
+https://github.com/SBoudrias/Inquirer.js/
+https://www.tabnine.com/code/javascript/functions/builtins/Array/find
+https://www.tabnine.com/code/javascript/query/node-fetch%40%40fetch%2Bbuiltins%40Array%40find
 
 ## Tests
 
-undefined
+No tests made.
 
 ## Contact
 
-undefined
+Contact me at jen@justjenb.me or here on my GitHub profile
