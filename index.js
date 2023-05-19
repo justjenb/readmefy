@@ -14,14 +14,11 @@
 // WHEN I click on the links in the Table of Contents
 // THEN I am taken to the corresponding section of the README
 
-
-// TODO: Include packages needed for this application
 const { generateMarkdown } = require("./utils/generateMarkdown");
 
 const fs = require("fs");
 const inquirer = require("inquirer");
 
-// TODO: Create an array of questions for user input
 const questions = [
   {
     type: "input",
@@ -75,7 +72,7 @@ const questions = [
     message: "What is your GitHub username?",
   },
   {
-    type: "editor",
+    type: "input",
     name: "projQuestions",
     message:
       "Enter some information on how to contact you if there are any questions regarding your project.",
@@ -102,7 +99,48 @@ async function getLicenses() {
   }
 }
 
-// TODO: Create a function to write README file
+async function askForImages() {
+  const images = [];
+  let addingImages = true;
+  const imageFileRegex = /\.(jpg|jpeg|png|gif|bmp)$/i;
+
+  while (addingImages) {
+    const image = await inquirer.prompt([
+      {
+        type: "input",
+        name: "description",
+        message: "Enter a description for the image:",
+      },
+      {
+        type: "input",
+        name: "fileName",
+        message: "Enter the file path of the image (must end with .jpg, .jpeg, .png, .gif, or .bmp):",
+        validate: (fileName) => {
+          if (imageFileRegex.test(fileName)) {
+            return true;
+          }
+          return "Please enter a valid image file name.";
+        },
+      },
+    ]);
+
+    images.push(image);
+
+    const { addAnother } = await inquirer.prompt([
+      {
+        type: "confirm",
+        name: "addAnother",
+        message: "Do you want to add another image?",
+      },
+    ]);
+
+    addingImages = addAnother;
+  }
+
+  return images;
+}
+
+
 function writeToFile(questions) {
   markdown = generateMarkdown(questions);
   fs.writeFile("README.md", markdown, (err) =>
@@ -110,10 +148,12 @@ function writeToFile(questions) {
   );
 }
 
-// TODO: Create a function to initialize app
 async function init() {
   let licensing = await getLicenses();
-  const answers = await inquirer.prompt(questions);
+  let answers = await inquirer.prompt(questions.slice(0, 4));
+  answers.images = await askForImages();
+  const remainingAnswers = await inquirer.prompt(questions.slice(4));
+  answers = {...answers, ...remainingAnswers};
   const selectedLicenses = answers.projLicense;
   let licenseInfo = (answers.licenseInfo = []);
   for (const selectedLicense of selectedLicenses) {
@@ -127,5 +167,4 @@ async function init() {
   writeToFile(answers);
 }
 
-// Function call to initialize app
 init();

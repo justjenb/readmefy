@@ -3,12 +3,10 @@ function renderLicenseBadge(license) {
   return `![License](https://img.shields.io/badge/License-${licensePart}-blue.svg)`;
 }
 
-// TODO: Create a function that returns the license link
 function renderLicenseLink(license) {
   return `https://opensource.org/licenses/${license}`;
 }
 
-// TODO: Create a function that returns the license section of README
 function renderLicenseSection(data) {
   let licenseSection = "";
   let licenseBadges = "";
@@ -23,6 +21,12 @@ function renderLicenseSection(data) {
 
 function generateMarkdown(data) {
   const { licenseSection, licenseBadges } = renderLicenseSection(data);
+  let imagesMarkdown = "";
+  if (data.images) {
+    for (const image of data.images) {
+      imagesMarkdown += `![${image.description}](./${image.fileName})\n`;
+    }
+  }
   const markdown = `
 # ${data.projectTitle}
 
@@ -49,6 +53,8 @@ ${data.installInfo}
 
 ${data.projUsage}
 
+${imagesMarkdown}
+
 ## License
 
 ${licenseSection}
@@ -63,7 +69,11 @@ ${data.projTests}
 
 ## Contact
 
-My name is ${data.userName};
+My name is ${data.userName}.
+
+Here is a link to my [GitHub](https://github.com/${data.ghUserName}) profile. 
+
+Additional contact details:
 
 ${data.projQuestions}
 `;
