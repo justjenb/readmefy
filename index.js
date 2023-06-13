@@ -126,34 +126,45 @@ async function askForImages() {
 
     images.push(image);
 
-    const { addAnother } = await inquirer.prompt([
+    const addAnother = await inquirer.prompt([
       {
         type: "confirm",
-        name: "addAnother",
+        name: "image",
         message: "Do you want to add another image?",
       },
     ]);
 
-    addingImages = addAnother;
+    addingImages = addAnother.image;
   }
 
   return images;
 }
 
 
+
 function writeToFile(questions) {
   markdown = generateMarkdown(questions);
-  fs.writeFile("README.md", markdown, (err) =>
+  fs.writeFile("README1.md", markdown, (err) =>
     err ? console.error(err) : console.log("Success!")
   );
 }
 
 async function init() {
   let licensing = await getLicenses();
-  let answers = await inquirer.prompt(questions.slice(0, 4));
-  answers.images = await askForImages();
-  const remainingAnswers = await inquirer.prompt(questions.slice(4));
-  answers = {...answers, ...remainingAnswers};
+  let answers = await inquirer.prompt(questions);
+
+  const addImages = await inquirer.prompt({
+    type: "confirm",
+    name: "addImages",
+    message: "Do you want to add any images?",
+  });
+
+  if (addImages.addImages) {
+    answers.images = await askForImages();
+  } else {
+    answers.images = []; 
+  }
+
   const selectedLicenses = answers.projLicense;
   let licenseInfo = (answers.licenseInfo = []);
   for (const selectedLicense of selectedLicenses) {
